@@ -9,5 +9,7 @@ namespace InfrastructureLayer.Database
             : base(options) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Media> Media { get; set; }
+
     }
 }
