@@ -12,6 +12,7 @@ namespace API.Controllers
     {
         private readonly AuthService _authService;
 
+        // Konstruktor med injicering av AuthService
         public AuthController(AuthService authService)
         {
             _authService = authService;
@@ -20,21 +21,38 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto dto)
         {
-            var token = await _authService.RegisterAsync(dto);
-            if (token == null)
-                return BadRequest("E-post används redan.");
+            // Kontrollera att inkommande data är giltig (via valideringsattribut)
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState); // Skickar valideringsfel till klient
 
+            // Försök registrera användare
+            var token = await _authService.RegisterAsync(dto);
+
+            // Om token är null betyder det att e-post redan finns
+            if (token == null)
+                return BadRequest("E-postadressen är redan registrerad.");
+
+            // Returnera JWT-token
             return Ok(new { token });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserDto dto)
         {
-            var token = await _authService.LoginAsync(dto);
-            if (token == null)
-                return Unauthorized("Felaktig e-post eller lösenord.");
+            // Kontrollera att indata är giltig
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            // Försök logga in användaren
+            var token = await _authService.LoginAsync(dto);
+
+            // Returnera 401 om inloggningen misslyckas
+            if (token == null)
+                return Unauthorized("Fel e-post eller lösenord.");
+
+            // Returnera JWT-token
             return Ok(new { token });
         }
+
     }
 }
