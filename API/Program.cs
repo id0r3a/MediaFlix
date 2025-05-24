@@ -1,3 +1,12 @@
+﻿
+using ApplicationLayer.Services;
+using DomainLayer.Interfaces;
+using InfrastructureLayer.Database;
+using InfrastructureLayer.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace API
 {
@@ -7,16 +16,42 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            //Registrera tjänster (Dependency Injection)
+            
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<AuthService>();
 
+            //Lägg till EF Core + SQL Server
+            builder.Services.AddDbContext<MediaFlixDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            //JWT Autentisering
+            var jwtSection = builder.Configuration.GetSection("Jwt");
+            var jwtKey = jwtSection["Key"];
+            var jwtIssuer = jwtSection["Issuer"];
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtIssuer,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                    };
+                });
+
+            //MVC, Swagger, etc.
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            //Middleware-pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -24,10 +59,8 @@ namespace API
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();
