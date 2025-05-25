@@ -17,7 +17,8 @@ namespace API
             var builder = WebApplication.CreateBuilder(args);
 
             //Registrera tjänster (Dependency Injection)
-            
+            builder.Services.AddScoped<IMediaRepository, MediaRepository>();
+            builder.Services.AddScoped<MediaService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<AuthService>();
 
