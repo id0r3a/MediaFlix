@@ -30,7 +30,7 @@ namespace API.Controllers
 
             // Om token är null betyder det att e-post redan finns
             if (token == null)
-                return BadRequest("E-postadressen är redan registrerad.");
+                return BadRequest("This email address is already in use.");
 
             // Returnera JWT-token
             return Ok(new { token });
@@ -48,7 +48,7 @@ namespace API.Controllers
 
             // Returnera 401 om inloggningen misslyckas
             if (token == null)
-                return Unauthorized("Fel e-post eller lösenord.");
+                return Unauthorized("Wrong email or password.");
 
             // Returnera JWT-token
             return Ok(new { token });

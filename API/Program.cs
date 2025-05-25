@@ -12,7 +12,7 @@ namespace API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +21,8 @@ namespace API
             builder.Services.AddScoped<MediaService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+            builder.Services.AddScoped<ReviewService>();
 
             //Lägg till EF Core + SQL Server
             builder.Services.AddDbContext<MediaFlixDbContext>(options =>
@@ -52,6 +54,13 @@ namespace API
 
             var app = builder.Build();
 
+            //Seed testdata
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<MediaFlixDbContext>();
+                await SeedData.InitializeAsync(dbContext);
+            }
             //Middleware-pipeline
             if (app.Environment.IsDevelopment())
             {

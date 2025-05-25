@@ -9,16 +9,16 @@ namespace ApplicationLayer.DTOs
 {
     public class RegisterUserDto
     {
-        [Required(ErrorMessage = "Användarnamn krävs.")]
-        [MinLength(3, ErrorMessage = "Användarnamnet måste vara minst 3 tecken.")]
+        [Required(ErrorMessage = "Username is required.")]
+        [MinLength(3, ErrorMessage = "The username must be at least 3 characters.")]
         public string Username { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "E-post krävs.")]
-        [EmailAddress(ErrorMessage = "Ogiltig e-postadress.")]
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Lösenord krävs.")]
-        [MinLength(6, ErrorMessage = "Lösenordet måste vara minst 6 tecken.")]
+        [Required(ErrorMessage = "Password required.")]
+        [MinLength(6, ErrorMessage = "The password must be at least 6 characters.")]
         public string Password { get; set; } = string.Empty;
     }
 }
