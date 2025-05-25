@@ -12,5 +12,11 @@
 
         // Koppling till användaren (ägaren av posten)
         public int UserId { get; set; }
+        
+        // Navigationsegenskap till användare
+        public User User { get; set; } = null!;
+
+        // Navigation: ett media kan ha flera recensioner
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
