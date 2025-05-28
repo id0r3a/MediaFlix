@@ -5,8 +5,6 @@ MediaFlix is a fullstack web application where users can track their books and m
 
 ✅ What they’ve read or watched
 
-✅ What they’re currently working through
-
 ✅ What they want to explore in the future
 
 Users can also leave reviews and ratings for each title.
