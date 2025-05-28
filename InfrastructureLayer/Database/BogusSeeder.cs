@@ -30,16 +30,24 @@ public static class BogusSeeder
         var mediaFaker = new Faker<Media>()
             .RuleFor(m => m.Title, f => f.Lorem.Sentence(3))
             .RuleFor(m => m.Genre, f => f.PickRandom("Fantasy", "Sci-Fi", "Drama", "Action", "Comedy"))
-            .RuleFor(m => m.Description, f => f.Lorem.Paragraph())
+            .RuleFor(m => m.Description, f => f.Lorem.Paragraph()) // 📝 Beskrivning alltid med
             .RuleFor(m => m.Type, f => f.PickRandom(MediaType.All))
-            .RuleFor(m => m.Creator, (f, m) => m.Type == MediaType.Book ? f.Name.FullName() : f.Company.CompanyName())
-            .RuleFor(m => m.Status, f => f.PickRandom(MediaStatus.All))
+            .RuleFor(m => m.Creator, (f, m) => m.Type == MediaType.Book
+                ? f.Name.FullName()
+                : f.Company.CompanyName())
+            .RuleFor(m => m.Status, (f, m) =>
+            {
+                return m.Type == MediaType.Book
+                    ? f.PickRandom(MediaStatus.Read, MediaStatus.WantToRead)
+                    : f.PickRandom(MediaStatus.Watched, MediaStatus.WantToWatch);
+            })
             .RuleFor(m => m.CreatedAt, f => f.Date.Past())
             .RuleFor(m => m.UserId, f => f.PickRandom(userIds));
 
-        var mediaList = mediaFaker.Generate(200);
-        context.Media.AddRange(mediaList);
-        context.SaveChanges();
+            // 5️⃣ Generera och spara 200 media
+            var mediaList = mediaFaker.Generate(200);
+            context.Media.AddRange(mediaList);
+            context.SaveChanges();
 
         // Skapa recensioner för vissa media
         var reviewFaker = new Faker<Review>()

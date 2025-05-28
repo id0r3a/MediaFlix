@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureLayer.Migrations
 {
     [DbContext(typeof(MediaFlixDbContext))]
-    [Migration("20250528104946_InitialCreate")]
+    [Migration("20250528110956_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
