@@ -17,7 +17,7 @@ namespace ApplicationLayer.DTOs
         public string Type { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Status is required.")]
-        [RegularExpression("Watching|Read|WantToWatch|WantToRead", ErrorMessage = "Invalid status.")]
+        [RegularExpression("Watched|Read|WantToWatch|WantToRead", ErrorMessage = "Invalid status.")]
         public string Status { get; set; } = string.Empty;
     }
 }
