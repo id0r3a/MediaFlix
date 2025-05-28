@@ -81,13 +81,6 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Seed testdata 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<MediaFlixDbContext>();
-    await SeedData.InitializeAsync(dbContext);
-}
-
 // Middleware-pipeline
 if (app.Environment.IsDevelopment())
 {

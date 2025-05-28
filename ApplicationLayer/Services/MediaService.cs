@@ -24,6 +24,7 @@ namespace ApplicationLayer.Services
                 Id = m.Id,
                 Title = m.Title,
                 Genre = m.Genre,
+                Description = m.Description,
                 Creator = m.Creator,
                 Type = m.Type,
                 Status = m.Status,
@@ -42,6 +43,7 @@ namespace ApplicationLayer.Services
                 Id = media.Id,
                 Title = media.Title,
                 Genre = media.Genre,
+                Description = media.Description,
                 Creator = media.Creator,
                 Type = media.Type,
                 Status = media.Status,
@@ -56,6 +58,7 @@ namespace ApplicationLayer.Services
             {
                 Title = dto.Title,
                 Genre = dto.Genre,
+                Description= dto.Description,
                 Creator = dto.Creator,
                 Type = dto.Type,
                 Status = dto.Status
@@ -68,6 +71,7 @@ namespace ApplicationLayer.Services
                 Id = created.Id,
                 Title = created.Title,
                 Genre = created.Genre,
+                Description = created.Description,
                 Creator = created.Creator,
                 Type = created.Type,
                 Status = created.Status,
@@ -84,6 +88,7 @@ namespace ApplicationLayer.Services
 
             media.Title = dto.Title;
             media.Genre = dto.Genre;
+            media.Description = dto.Description;
             media.Creator = dto.Creator;
             media.Type = dto.Type;
             media.Status = dto.Status;
