@@ -8,7 +8,7 @@
         public string Description { get; set; }
         public string Creator { get; set; }
         public string Type { get; set; } // "Book", "Movie"
-        public string Status { get; set; } // "Watching", "Read", etc.
+        public string Status { get; set; } // "Watched", "Read", etc.
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Koppling till användaren (ägaren av posten)

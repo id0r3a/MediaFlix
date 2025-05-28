@@ -30,16 +30,46 @@ public static class BogusSeeder
         var mediaFaker = new Faker<Media>()
             .RuleFor(m => m.Title, f => f.Lorem.Sentence(3))
             .RuleFor(m => m.Genre, f => f.PickRandom("Fantasy", "Sci-Fi", "Drama", "Action", "Comedy"))
-            .RuleFor(m => m.Description, f => f.Lorem.Paragraph())
-            .RuleFor(m => m.Type, f => f.PickRandom("Book", "Movie"))
-            .RuleFor(m => m.Creator, (f, m) => m.Type == "Book" ? f.Person.FullName : f.Name.FullName())
-            .RuleFor(m => m.Status, f => f.PickRandom("Watching", "Read", "Planned"))
+            .RuleFor(m => m.Description, f => f.Lorem.Paragraph()) // 📝 Beskrivning alltid med
+            .RuleFor(m => m.Type, f => f.PickRandom(MediaType.All))
+            .RuleFor(m => m.Creator, (f, m) => m.Type == MediaType.Book
+                ? f.Name.FullName()
+                : f.Company.CompanyName())
+            .RuleFor(m => m.Status, (f, m) =>
+            {
+                return m.Type == MediaType.Book
+                    ? f.PickRandom(MediaStatus.Read, MediaStatus.WantToRead)
+                    : f.PickRandom(MediaStatus.Watched, MediaStatus.WantToWatch);
+            })
             .RuleFor(m => m.CreatedAt, f => f.Date.Past())
-            .RuleFor(m => m.UserId, f => f.PickRandom(userIds)); // här använder vi existerande Id:n
+            .RuleFor(m => m.UserId, f => f.PickRandom(userIds));
 
-        //  Generera och spara
-        var mediaItems = mediaFaker.Generate(200); // 100 books + 100 movies (slumpas)
-        context.Media.AddRange(mediaItems);
+            // 5️⃣ Generera och spara 200 media
+            var mediaList = mediaFaker.Generate(200);
+            context.Media.AddRange(mediaList);
+            context.SaveChanges();
+
+        // Skapa recensioner för vissa media
+        var reviewFaker = new Faker<Review>()
+            .RuleFor(r => r.Rating, f => f.Random.Int(1, 5))
+            .RuleFor(r => r.Comment, f => f.Lorem.Sentence(10));
+            
+
+        var reviewsToAdd = new List<Review>();
+
+        foreach (var media in mediaList)
+        {
+            // 50 % chans att skapa en recension
+            if (new Random().NextDouble() < 0.5)
+            {
+                var review = reviewFaker.Generate();
+                review.MediaId = media.Id;
+                review.UserId = media.UserId;
+                reviewsToAdd.Add(review);
+            }
+        }
+
+        context.Reviews.AddRange(reviewsToAdd);
         context.SaveChanges();
     }
 }
