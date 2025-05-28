@@ -11,6 +11,7 @@ namespace InfrastructureLayer.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Media> Media { get; set; }
         public DbSet<Review> Reviews { get; set; }
+       
 
         //Konfigurerar relationer mellan entiteter.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
