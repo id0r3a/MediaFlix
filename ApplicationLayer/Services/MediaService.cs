@@ -61,7 +61,8 @@ namespace ApplicationLayer.Services
                 Description= dto.Description,
                 Creator = dto.Creator,
                 Type = dto.Type,
-                Status = dto.Status
+                Status = dto.Status,
+                UserId = dto.UserId
             };
 
             var created = await _mediaRepository.CreateAsync(media);
