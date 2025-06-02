@@ -30,7 +30,7 @@ namespace API.Controllers
             var result = await _reviewService.CreateAsync(dto, userId);
 
             if (result == null)
-                return Forbid("You can only review media that you have created yourself.");
+                return Forbid();
 
             return Ok(result);
         }

@@ -22,10 +22,10 @@ namespace InfrastructureLayer.Repositories
 
         public async Task<Review?> CreateAsync(Review review)
         {
-            // Kontroll: användaren får bara recensera sin egen media
-            var ownedMedia = await _context.Media.FirstOrDefaultAsync(media => media.Id == review.MediaId && media.UserId == review.UserId);
-            if (ownedMedia == null)
-                return null;
+            //vem som kan registrera en bok
+            var existingMedia = await _context.Media.FirstOrDefaultAsync(media => media.Id == review.MediaId);
+            if (existingMedia == null)
+                return null;  // säkra att mediet faktiskt finns
 
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
