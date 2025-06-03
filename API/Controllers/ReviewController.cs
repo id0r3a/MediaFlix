@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("reviews")]
+    [Route("api/reviews")]
     [Authorize]
     public class ReviewController : ControllerBase
     {
