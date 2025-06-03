@@ -1,11 +1,14 @@
 ﻿using ApplicationLayer.DTOs;
 using ApplicationLayer.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
+    
     public class MediaController : ControllerBase
     {
         private readonly MediaService _mediaService;
@@ -66,12 +69,16 @@ namespace API.Controllers
             await _mediaService.DeleteAsync(id, userId);
             return NoContent();
         }
+        // 🔐 Hämta korrekt användar-ID från JWT-token
         private int GetCurrentUserId()
         {
-            // TEMP för test:
-            return 1;
+            var userIdClaim = User.Claims.FirstOrDefault(c =>
+                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
 
-         
+            if (userIdClaim == null)
+                throw new UnauthorizedAccessException("User ID not found in token");
+
+            return int.Parse(userIdClaim.Value);
         }
     }
 }
