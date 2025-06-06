@@ -12,15 +12,30 @@ namespace ApplicationLayer.Services
     public class ReviewService
     {
         private readonly IReviewRepository _reviewRepository;
+        private readonly IMediaRepository _mediaRepository;
 
-        public ReviewService(IReviewRepository reviewRepository)
+        public ReviewService(IReviewRepository reviewRepository, IMediaRepository mediaRepository)
         {
             _reviewRepository = reviewRepository;
+            _mediaRepository = mediaRepository;
         }
 
         //Skapar en ny recension för angiven media som tillhör användaren.
         public async Task<ReviewDto?> CreateAsync(CreateReviewDto input, int userId)
         {
+            //  Hämta tillhörande media (bok)
+            var media = await _mediaRepository.GetByIdForUserAsync(input.MediaId, userId);
+
+            //  Om det är en bok och inte redan 'Read', uppdatera status
+            if (media != null &&
+                media.Type?.ToLower() == "book" &&
+                media.Status?.ToLower() != "read")
+            {
+                media.Status = "Read";
+                await _mediaRepository.UpdateForUserAsync(media, userId);
+            }
+
+            //  Spara recensionen efter att boken markerats som "Read"
             var reviewToCreate = new Review
             {
                 Rating = input.Rating,
@@ -42,6 +57,7 @@ namespace ApplicationLayer.Services
                 Username = savedReview.User?.Username ?? ""
             };
         }
+
 
         //Hämtar alla recensioner kopplade till ett specifikt media.
         public async Task<IEnumerable<ReviewDto>> GetByMediaIdAsync(int mediaId)
