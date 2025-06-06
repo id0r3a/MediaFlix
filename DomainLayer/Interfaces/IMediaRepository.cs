@@ -9,5 +9,6 @@ namespace DomainLayer.Interfaces
         Task<Media> CreateAsync(Media media);
         Task UpdateForUserAsync(Media media, int userId);
         Task DeleteForUserAsync(int id, int userId);
+
     }
 }

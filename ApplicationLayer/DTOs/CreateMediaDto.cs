@@ -4,8 +4,7 @@ namespace ApplicationLayer.DTOs
 {
     public class CreateMediaDto
     {
-        [Required(ErrorMessage = "UserId is required.")]
-        public int UserId { get; set; }
+        public int UserId { get; set; } 
 
         [Required(ErrorMessage = "Title is required.")]
         public string Title { get; set; } = string.Empty;

@@ -43,6 +43,11 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMediaDto dto)
         {
+            var userId = GetCurrentUserId();
+            dto.UserId = userId; // användar-ID från token
+            Console.WriteLine("UserId från token: " + userId);
+
+
             var created = await _mediaService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
@@ -69,7 +74,7 @@ namespace API.Controllers
             await _mediaService.DeleteAsync(id, userId);
             return NoContent();
         }
-        // 🔐 Hämta korrekt användar-ID från JWT-token
+        //  Hämta korrekt användar-ID från JWT-token
         private int GetCurrentUserId()
         {
             var userIdClaim = User.Claims.FirstOrDefault(c =>
