@@ -87,15 +87,27 @@ namespace ApplicationLayer.Services
             if (media == null)
                 throw new Exception("Media not found or access denied");
 
-            media.Title = dto.Title;
-            media.Genre = dto.Genre;
-            media.Description = dto.Description;
-            media.Creator = dto.Creator;
-            media.Type = dto.Type;
-            media.Status = dto.Status;
+            if (!string.IsNullOrEmpty(dto.Title))
+                media.Title = dto.Title;
+
+            if (!string.IsNullOrEmpty(dto.Genre))
+                media.Genre = dto.Genre;
+
+            if (dto.Description != null)
+                media.Description = dto.Description;
+
+            if (dto.Creator != null)
+                media.Creator = dto.Creator;
+
+            if (!string.IsNullOrEmpty(dto.Type))
+                media.Type = dto.Type;
+
+            if (!string.IsNullOrEmpty(dto.Status))
+                media.Status = dto.Status;
 
             await _mediaRepository.UpdateForUserAsync(media, userId);
         }
+
 
         //tar bort media med användareID
         public async Task DeleteAsync(int id, int userId)

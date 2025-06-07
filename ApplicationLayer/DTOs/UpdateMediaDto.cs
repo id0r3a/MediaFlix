@@ -4,21 +4,18 @@ namespace ApplicationLayer.DTOs
 {
     public class UpdateMediaDto
     {
-        [Required(ErrorMessage = "Title is required.")]
-        public string Title { get; set; } = string.Empty;
+        public string? Title { get; set; }
 
-        [Required(ErrorMessage = "Genre is required.")]
-        public string Genre { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty ;
+        public string? Genre { get; set; }
 
-        public string Creator { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
-        [Required(ErrorMessage = "Type is required.")]
-        [RegularExpression("Book|Movie", ErrorMessage = "Type must be 'Book' or 'Movie'.")]
-        public string Type { get; set; } = string.Empty;
+        public string? Creator { get; set; }
 
-        [Required(ErrorMessage = "Status is required.")]
+        public string? Type { get; set; }
+
         [RegularExpression("Watched|Read|WantToWatch|WantToRead", ErrorMessage = "Invalid status.")]
-        public string Status { get; set; } = string.Empty;
+        public string? Status { get; set; }
     }
+
 }
